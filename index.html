@@ -3,194 +3,497 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finanzportal</title>
+    <title>Finanzportal | Geldanlagen im Überblick</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --primary-color: #06c;
+            --card-bg: #ffffff;
+            --section-bg: #fbfbfd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
         }
-        header {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav {
-            background: #3498db;
-            padding: 0.5rem;
-        }
-        nav ul {
+        
+        .navbar {
+            background-color: rgba(251, 251, 253, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 22px;
+            height: 44px;
             display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-wrap: wrap;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
-        nav li {
-            margin: 0 10px;
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            margin-left: 24px;
         }
-        nav a {
-            color: white;
+        
+        .nav-links a {
+            color: var(--text-color);
             text-decoration: none;
+            font-size: 12px;
+            font-weight: 400;
+            opacity: 0.8;
+            transition: opacity 0.3s;
         }
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            margin: 20px auto;
+        
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--primary-color);
         }
-        .card {
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        .card-header {
-            background: #2c3e50;
-            color: white;
-            padding: 10px 15px;
-        }
-        .card-body {
-            padding: 15px;
-        }
-        .price {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        .up {
-            color: #27ae60;
-        }
-        .down {
-            color: #e74c3c;
-        }
-        .chart-container {
-            height: 200px;
-            margin-top: 15px;
-        }
-        footer {
-            background: #2c3e50;
-            color: white;
+        
+        .hero {
             text-align: center;
-            padding: 1rem;
-            margin-top: 20px;
+            padding: 80px 22px 60px;
+            background-color: var(--section-bg);
         }
-        @media (max-width: 600px) {
-            nav ul {
-                flex-direction: column;
-                align-items: center;
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .hero p {
+            font-size: 28px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.8;
+        }
+        
+        .investment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 40px 22px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .investment-card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .investment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            padding: 24px 24px 16px;
+        }
+        
+        .card-header h3 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .card-header p {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        
+        .card-body {
+            padding: 0 24px 16px;
+        }
+        
+        .price {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .up {
+            color: #34C759;
+        }
+        
+        .down {
+            color: #FF3B30;
+        }
+        
+        .chart-container {
+            height: 120px;
+            margin: 16px 0;
+        }
+        
+        .info-section {
+            background-color: var(--section-bg);
+            padding: 80px 22px;
+        }
+        
+        .info-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .info-container h2 {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+        
+        .info-item {
+            margin-bottom: 40px;
+        }
+        
+        .info-item h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 22px;
+            font-size: 12px;
+            opacity: 0.6;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
             }
-            nav li {
-                margin: 5px 0;
+            
+            .hero p {
+                font-size: 20px;
+            }
+            
+            .investment-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Finanzportal</h1>
-        <p>Einfache Übersicht über Geldanlagen</p>
-    </header>
-    
-    <nav>
-        <ul>
-            <li><a href="#aktien">Aktien</a></li>
-            <li><a href="#etfs">ETFs</a></li>
-            <li><a href="#krypto">Krypto</a></li>
-        </ul>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="#aktien">Aktien</a>
+            <a href="#etfs">ETFs</a>
+            <a href="#anleihen">Anleihen</a>
+            <a href="#krypto">Krypto</a>
+            <a href="#festgeld">Festgeld</a>
+            <a href="#rohstoffe">Rohstoffe</a>
+        </div>
     </nav>
     
-    <div class="container">
-        <div class="card">
+    <section class="hero">
+        <h1>Finanzportal</h1>
+        <p>Moderne Übersicht aller Geldanlageformen</p>
+    </section>
+    
+    <div class="investment-grid">
+        <!-- Aktien -->
+        <div class="investment-card">
             <div class="card-header">
-                <h2>DAX-ETF</h2>
-                <p>ETF</p>
+                <h3>Apple Inc.</h3>
+                <p>Aktie</p>
             </div>
             <div class="card-body">
-                <p>ETFs, die den deutschen Leitindex DAX abbilden.</p>
-                <div class="price">135,42 € <span class="up">+1,23%</span></div>
+                <div class="price">172,34 € <span class="up">+1,2%</span></div>
                 <div class="chart-container">
-                    <canvas id="chart1"></canvas>
+                    <canvas id="aktienChart"></canvas>
                 </div>
             </div>
         </div>
         
-        <div class="card">
+        <!-- ETFs -->
+        <div class="investment-card">
             <div class="card-header">
-                <h2>Bitcoin</h2>
+                <h3>DAX-ETF</h3>
+                <p>ETF</p>
+            </div>
+            <div class="card-body">
+                <div class="price">135,42 € <span class="up">+0,8%</span></div>
+                <div class="chart-container">
+                    <canvas id="etfChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Anleihen -->
+        <div class="investment-card">
+            <div class="card-header">
+                <h3>Bundesanleihe</h3>
+                <p>Anleihe</p>
+            </div>
+            <div class="card-body">
+                <div class="price">98,76 € <span class="down">-0,2%</span></div>
+                <div class="chart-container">
+                    <canvas id="anleihenChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Krypto -->
+        <div class="investment-card">
+            <div class="card-header">
+                <h3>Bitcoin</h3>
                 <p>Kryptowährung</p>
             </div>
             <div class="card-body">
-                <p>Die erste und bekannteste Kryptowährung.</p>
-                <div class="price">42.356,78 € <span class="up">+3,45%</span></div>
+                <div class="price">42.356 € <span class="up">+3,5%</span></div>
                 <div class="chart-container">
-                    <canvas id="chart2"></canvas>
+                    <canvas id="kryptoChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Festgeld/Tagesgeld -->
+        <div class="investment-card">
+            <div class="card-header">
+                <h3>Festgeld 2J</h3>
+                <p>Festgeld</p>
+            </div>
+            <div class="card-body">
+                <div class="price">2,5% <span class="up">+0,0%</span></div>
+                <div class="chart-container">
+                    <canvas id="festgeldChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rohstoffe -->
+        <div class="investment-card">
+            <div class="card-header">
+                <h3>Gold</h3>
+                <p>Rohstoff</p>
+            </div>
+            <div class="card-body">
+                <div class="price">1.832 € <span class="down">-1,2%</span></div>
+                <div class="chart-container">
+                    <canvas id="rohstoffeChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
     
-    <footer>
-        <p>Projekt von Paul P., Shayan A., Karim K.</p>
-        <p>Letzte Aktualisierung: <span id="date"></span></p>
+    <section class="info-section" id="informationen">
+        <div class="info-container">
+            <h2>Informationen zu Anlageformen</h2>
+            
+            <div class="info-item" id="aktien">
+                <h3>Aktien</h3>
+                <p>Aktien repräsentieren Anteile an einem Unternehmen. Als Aktionär profitieren Sie von Kurssteigerungen und möglichen Dividendenzahlungen. Aktien bieten langfristig hohe Renditechancen, unterliegen aber auch stärkeren Kursschwankungen als andere Anlageformen.</p>
+            </div>
+            
+            <div class="info-item" id="etfs">
+                <h3>ETFs</h3>
+                <p>ETFs (Exchange Traded Funds) sind börsengehandelte Indexfonds, die einen bestimmten Marktindex nachbilden. Sie bieten breite Streuung zu geringen Kosten und eignen sich besonders für langfristige Anlagestrategien.</p>
+            </div>
+            
+            <div class="info-item" id="anleihen">
+                <h3>Anleihen</h3>
+                <p>Anleihen sind festverzinsliche Wertpapiere, bei denen Sie dem Emittenten (Staat oder Unternehmen) Geld leihen und dafür Zinsen erhalten. Sie gelten als sicherer als Aktien, bieten aber meist geringere Renditechancen.</p>
+            </div>
+            
+            <div class="info-item" id="krypto">
+                <h3>Kryptowährungen</h3>
+                <p>Kryptowährungen wie Bitcoin sind digitale Währungen mit hoher Volatilität. Sie bieten Chancen auf hohe Renditen, bergen aber auch besondere Risiken und sollten nur mit Vorsicht und als Beimischung im Portfolio betrachtet werden.</p>
+            </div>
+            
+            <div class="info-item" id="festgeld">
+                <h3>Festgeld/Tagesgeld</h3>
+                <p>Tagesgeld und Festgeld sind sichere Anlageformen mit festen oder variablen Zinsen. Während Tagesgeld jederzeit verfügbar ist, bindet Festgeld das Kapital für einen festen Zeitraum. Beide eignen sich zur kurzfristigen Geldanlage oder als sichere Portfolio-Komponente.</p>
+            </div>
+            
+            <div class="info-item" id="rohstoffe">
+                <h3>Rohstoffe</h3>
+                <p>Rohstoffe wie Gold, Öl oder Agrarprodukte können als Inflationsschutz dienen. Die Preise unterliegen oft starken Schwankungen aufgrund von Angebot und Nachfrage. Gold wird traditionell als "sicherer Hafen" in Krisenzeiten betrachtet.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <p>Projekt von Shayan A., Karim K., Paul P.</p>
+        <p>Letzte Aktualisierung: <span id="updateDate"></span></p>
     </footer>
 
     <script>
         // Aktuelles Datum anzeigen
-        document.getElementById('date').textContent = new Date().toLocaleDateString('de-DE');
+        document.getElementById('updateDate').textContent = new Date().toLocaleDateString('de-DE');
         
-        // Chart für DAX-ETF
-        const ctx1 = document.getElementById('chart1').getContext('2d');
-        new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai'],
-                datasets: [{
-                    label: 'DAX-ETF Kurs',
-                    data: [120, 125, 130, 128, 135],
-                    borderColor: '#3498db',
-                    tension: 0.1,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+        // Chart-Farben
+        const colors = {
+            blue: 'rgba(0, 102, 204, 1)',
+            green: 'rgba(52, 199, 89, 1)',
+            red: 'rgba(255, 59, 48, 1)',
+            yellow: 'rgba(255, 204, 0, 1)',
+            gray: 'rgba(142, 142, 147, 1)'
+        };
+        
+        // Helper-Funktion für zufällige Daten
+        function generateRandomData(length, min, max) {
+            return Array.from({length}, () => Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        
+        // Aktien Chart
+        new Chart(
+            document.getElementById('aktienChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'],
+                    datasets: [{
+                        data: [160, 165, 168, 170, 169, 172],
+                        borderColor: colors.blue,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
                 }
             }
-        });
+        );
         
-        // Chart für Bitcoin
-        const ctx2 = document.getElementById('chart2').getContext('2d');
-        new Chart(ctx2, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai'],
-                datasets: [{
-                    label: 'Bitcoin Kurs',
-                    data: [30000, 35000, 38000, 40000, 42356],
-                    borderColor: '#f39c12',
-                    tension: 0.1,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+        // ETF Chart
+        new Chart(
+            document.getElementById('etfChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'],
+                    datasets: [{
+                        data: [130, 132, 131, 133, 134, 135],
+                        borderColor: colors.green,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
                 }
             }
-        });
+        );
+        
+        // Anleihen Chart
+        new Chart(
+            document.getElementById('anleihenChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'],
+                    datasets: [{
+                        data: [99, 98.8, 98.9, 98.7, 98.8, 98.7],
+                        borderColor: colors.gray,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            }
+        );
+        
+        // Krypto Chart
+        new Chart(
+            document.getElementById('kryptoChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'],
+                    datasets: [{
+                        data: [38000, 40000, 41000, 39500, 41500, 42356],
+                        borderColor: colors.yellow,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            }
+        );
+        
+        // Festgeld Chart
+        new Chart(
+            document.getElementById('festgeldChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'],
+                    datasets: [{
+                        data: [2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+                        borderColor: colors.blue,
+                        borderWidth: 2,
+                        tension: 0,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            }
+        );
+        
+        // Rohstoffe Chart
+        new Chart(
+            document.getElementById('rohstoffeChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun'],
+                    datasets: [{
+                        data: [1850, 1840, 1835, 1845, 1830, 1832],
+                        borderColor: colors.yellow,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            }
+        );
     </script>
 </body>
 </html>
