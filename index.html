@@ -3,116 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Crypto Wallet</title>
     <style>
         body {
-            background-color: #121212;
-            color: white;
             font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 20px;
+            color: #333;
         }
         
-        h1 {
-            color: #00ff88;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .balance {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             text-align: center;
         }
         
-        .search {
-            width: 100%;
-            padding: 10px;
-            margin: 20px 0;
-            background: #222;
-            border: 1px solid #333;
-            color: white;
+        .balance h2 {
+            margin-top: 0;
+            color: #555;
         }
         
-        .asset {
-            background: #222;
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .crypto-section {
+            background-color: white;
+            border-radius: 10px;
             padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .crypto-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
         }
         
-        .up {
-            color: #00ff88;
+        .crypto-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
         }
         
-        .down {
-            color: #ff5555;
+        .crypto-name {
+            font-weight: bold;
         }
         
-        .info {
-            margin-top: 40px;
-            padding: 20px;
-            background: #222;
-            border-radius: 5px;
+        .crypto-value {
+            text-align: right;
+        }
+        
+        .crypto-amount {
+            color: #666;
+        }
+        
+        .crypto-price {
+            font-weight: bold;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Dashboard</h1>
+    <div class="header">
+        <h1>Wallet</h1>
+    </div>
     
-    <input type="text" class="search" placeholder="Nach Cryptos suchen..." id="search">
+    <div class="balance">
+        <h2>Crypto</h2>
+        <div class="balance-amount">$6,287.83</div>
+    </div>
     
-    <div id="assets">
-        <div class="asset" data-type="crypto">
-            <span>Bitcoin (BTC)</span>
-            <span class="up">$56,423 +5.2%</span>
+    <div class="crypto-section">
+        <div class="crypto-header">
+            <h3>Bitcoin</h3>
+            <span>Security Key</span>
         </div>
-        <div class="asset" data-type="stock">
-            <span>Apple (AAPL)</span>
-            <span class="up">$182.34 +1.3%</span>
-        </div>
-        <div class="asset" data-type="stock">
-            <span>Nvidia (NVDA)</span>
-            <span class="up">$762.11 +3.7%</span>
-        </div>
-        <div class="asset" data-type="stock">
-            <span>Nike (NKE)</span>
-            <span class="down">$93.45 -0.8%</span>
-        </div>
-        <div class="asset" data-type="crypto">
-            <span>Solana (SOL)</span>
-            <span class="up">$132.67 +8.1%</span>
-        </div>
-        <div class="asset" data-type="crypto">
-            <span>Dogecoin (DOGE)</span>
-            <span class="down">$0.12 -2.4%</span>
-        </div>
-        <div class="asset" data-type="crypto">
-            <span>Civic (CVC)</span>
-            <span class="up">$0.18 +1.9%</span>
-        </div>
-        <div class="asset" data-type="crypto">
-            <span>Ethereum (ETH)</span>
-            <span class="up">$3,012.45 +4.6%</span>
+        
+        <div class="crypto-header">
+            <h3>Ethereum</h3>
+            <span>Add app</span>
         </div>
     </div>
     
-    <div class="info">
-        <h3>Was sind Aktien?</h3>
-        <p>Aktien sind Anteile an einem Unternehmen. Wenn Sie eine Aktie kaufen, werden Sie Miteigentümer des Unternehmens. Der Wert von Aktien steigt oder fällt je nach Erfolg des Unternehmens und der Wirtschaftslage.</p>
+    <hr>
+    
+    <div class="crypto-section">
+        <div class="crypto-item">
+            <div>
+                <div class="crypto-name">Bitcoin</div>
+                <div class="crypto-amount">0.118 BTC</div>
+            </div>
+            <div class="crypto-value">
+                <div class="crypto-price">$2,258.93</div>
+            </div>
+        </div>
+        
+        <div class="crypto-item">
+            <div>
+                <div class="crypto-name">Ethereum</div>
+                <div class="crypto-amount">1.43 ETH</div>
+            </div>
+            <div class="crypto-value">
+                <div class="crypto-price">$1,858.08</div>
+            </div>
+        </div>
+        
+        <div class="crypto-item">
+            <div>
+                <div class="crypto-name">Tether USD</div>
+                <div class="crypto-amount">387.14 USDT</div>
+            </div>
+            <div class="crypto-value">
+                <div class="crypto-price">$387.14</div>
+            </div>
+        </div>
+        
+        <div class="crypto-item">
+            <div>
+                <div class="crypto-name">Polygon</div>
+                <div class="crypto-amount">189.43 MATIC</div>
+            </div>
+            <div class="crypto-value">
+                <div class="crypto-price">$150.89</div>
+            </div>
+        </div>
+        
+        <div class="crypto-item">
+            <div>
+                <div class="crypto-name">Avalanche</div>
+                <div class="crypto-amount">4.21 AVAX</div>
+            </div>
+            <div class="crypto-value">
+                <div class="crypto-price">$67.70</div>
+            </div>
+        </div>
+        
+        <div class="crypto-item">
+            <div>
+                <div class="crypto-name">Binance Smart Chain</div>
+                <div class="crypto-amount">0 BNB</div>
+            </div>
+            <div class="crypto-value">
+                <div class="crypto-price">$0.00</div>
+            </div>
+        </div>
     </div>
-
-    <script>
-        document.getElementById('search').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const assets = document.querySelectorAll('.asset');
-            
-            assets.forEach(asset => {
-                const isCrypto = asset.getAttribute('data-type') === 'crypto';
-                const name = asset.textContent.toLowerCase();
-                
-                if (searchTerm === '' || (isCrypto && name.includes(searchTerm))) {
-                    asset.style.display = 'flex';
-                } else {
-                    asset.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
