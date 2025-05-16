@@ -3,172 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Wallet</title>
+    <title>Finance Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+        :root {
+            --bg-color: #f5f5f7;
+            --card-color: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #0071e3;
+            --positive: #34c759;
+            --negative: #ff3b30;
+        }
+        
+        * {
             margin: 0;
-            padding: 20px;
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
         }
         
-        .balance {
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
-        .balance h2 {
-            margin-top: 0;
-            color: #555;
+        header {
+            background: linear-gradient(135deg, #000428, #004e92);
+            color: white;
+            padding: 60px 0 100px;
+            position: relative;
+            overflow: hidden;
         }
         
-        .balance-amount {
-            font-size: 24px;
-            font-weight: bold;
-            color: #000;
+        .header-content {
+            position: relative;
+            z-index: 2;
         }
         
-        .crypto-section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
         
-        .crypto-header {
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: -60px;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .card {
+            background: var(--card-color);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
         }
         
-        .crypto-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #f5f5f5;
+        .asset-name {
+            font-size: 1.3rem;
+            font-weight: 600;
         }
         
-        .crypto-name {
-            font-weight: bold;
+        .asset-symbol {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
         
-        .crypto-value {
-            text-align: right;
+        .asset-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
         
-        .crypto-amount {
-            color: #666;
+        .asset-change {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
         
-        .crypto-price {
-            font-weight: bold;
+        .positive {
+            background-color: rgba(52, 199, 89, 0.1);
+            color: var(--positive);
         }
         
-        hr {
-            border: none;
-            border-top: 1px solid #eee;
+        .negative {
+            background-color: rgba(255, 59, 48, 0.1);
+            color: var(--negative);
+        }
+        
+        .chart-container {
+            height: 150px;
             margin: 20px 0;
+            position: relative;
+            display: none;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #f5f5f7 0%, #e5e5ea 50%, #f5f5f7 100%);
+            background-size: 200% 100%;
+            border-radius: 8px;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .info-section {
+            padding: 80px 0;
+            background-color: var(--card-color);
+            margin-top: 60px;
+        }
+        
+        .info-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .info-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+        }
+        
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Apple-like animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Wallet</h1>
+    <header>
+        <div class="container header-content">
+            <h1>Finance Pro</h1>
+            <p class="subtitle">Marktübersicht auf einen Blick</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="grid">
+            <div class="card" data-asset="bitcoin">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-name">Bitcoin</div>
+                        <div class="asset-symbol">BTC</div>
+                    </div>
+                    <i class="fab fa-bitcoin" style="color: #f7931a; font-size: 24px;"></i>
+                </div>
+                <div class="asset-price">$56,423</div>
+                <span class="asset-change positive">+5.2%</span>
+                <div class="chart-container">
+                    <div class="chart-placeholder"></div>
+                </div>
+            </div>
+            
+            <div class="card" data-asset="apple">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-name">Apple</div>
+                        <div class="asset-symbol">AAPL</div>
+                    </div>
+                    <i class="fab fa-apple" style="font-size: 24px;"></i>
+                </div>
+                <div class="asset-price">$182.34</div>
+                <span class="asset-change positive">+1.3%</span>
+                <div class="chart-container">
+                    <div class="chart-placeholder"></div>
+                </div>
+            </div>
+            
+            <div class="card" data-asset="nvidia">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-name">Nvidia</div>
+                        <div class="asset-symbol">NVDA</div>
+                    </div>
+                    <i class="fas fa-microchip" style="font-size: 24px;"></i>
+                </div>
+                <div class="asset-price">$762.11</div>
+                <span class="asset-change positive">+3.7%</span>
+                <div class="chart-container">
+                    <div class="chart-placeholder"></div>
+                </div>
+            </div>
+            
+            <div class="card" data-asset="nike">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-name">Nike</div>
+                        <div class="asset-symbol">NKE</div>
+                    </div>
+                    <i class="fas fa-shoe-prints" style="font-size: 24px;"></i>
+                </div>
+                <div class="asset-price">$93.45</div>
+                <span class="asset-change negative">-0.8%</span>
+                <div class="chart-container">
+                    <div class="chart-placeholder"></div>
+                </div>
+            </div>
+            
+            <div class="card" data-asset="dogecoin">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-name">Dogecoin</div>
+                        <div class="asset-symbol">DOGE</div>
+                    </div>
+                    <i class="fab fa-reddit-alien" style="color: #cb9800; font-size: 24px;"></i>
+                </div>
+                <div class="asset-price">$0.12</div>
+                <span class="asset-change negative">-2.4%</span>
+                <div class="chart-container">
+                    <div class="chart-placeholder"></div>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <div class="balance">
-        <h2>Crypto</h2>
-        <div class="balance-amount">$6,287.83</div>
-    </div>
-    
-    <div class="crypto-section">
-        <div class="crypto-header">
-            <h3>Bitcoin</h3>
-            <span>Security Key</span>
-        </div>
-        
-        <div class="crypto-header">
-            <h3>Ethereum</h3>
-            <span>Add app</span>
-        </div>
-    </div>
-    
-    <hr>
-    
-    <div class="crypto-section">
-        <div class="crypto-item">
-            <div>
-                <div class="crypto-name">Bitcoin</div>
-                <div class="crypto-amount">0.118 BTC</div>
-            </div>
-            <div class="crypto-value">
-                <div class="crypto-price">$2,258.93</div>
-            </div>
-        </div>
-        
-        <div class="crypto-item">
-            <div>
-                <div class="crypto-name">Ethereum</div>
-                <div class="crypto-amount">1.43 ETH</div>
-            </div>
-            <div class="crypto-value">
-                <div class="crypto-price">$1,858.08</div>
-            </div>
-        </div>
-        
-        <div class="crypto-item">
-            <div>
-                <div class="crypto-name">Tether USD</div>
-                <div class="crypto-amount">387.14 USDT</div>
-            </div>
-            <div class="crypto-value">
-                <div class="crypto-price">$387.14</div>
-            </div>
-        </div>
-        
-        <div class="crypto-item">
-            <div>
-                <div class="crypto-name">Polygon</div>
-                <div class="crypto-amount">189.43 MATIC</div>
-            </div>
-            <div class="crypto-value">
-                <div class="crypto-price">$150.89</div>
-            </div>
-        </div>
-        
-        <div class="crypto-item">
-            <div>
-                <div class="crypto-name">Avalanche</div>
-                <div class="crypto-amount">4.21 AVAX</div>
-            </div>
-            <div class="crypto-value">
-                <div class="crypto-price">$67.70</div>
-            </div>
-        </div>
-        
-        <div class="crypto-item">
-            <div>
-                <div class="crypto-name">Binance Smart Chain</div>
-                <div class="crypto-amount">0 BNB</div>
-            </div>
-            <div class="crypto-value">
-                <div class="crypto-price">$0.00</div>
-            </div>
+    <div class="info-section">
+        <div class="container info-content">
+            <h2 class="info-title">Was sind Aktien?</h2>
+            <p class="info-text">
+                Aktien repräsentieren Anteile an einem Unternehmen. Wenn Sie eine Aktie kaufen, 
+                werden Sie Miteigentümer des Unternehmens. Der Wert von Aktien steigt oder fällt 
+                basierend auf der Unternehmensperformance, Marktbedingungen und Wirtschaftslage. 
+                Investoren profitieren durch Kurssteigerungen und Dividendenausschüttungen.
+            </p>
+            <div class="divider"></div>
+            <p class="info-text">
+                Kryptowährungen sind digitale Währungen, die auf Blockchain-Technologie basieren. 
+                Im Gegensatz zu traditionellen Aktien unterliegen sie größeren Schwankungen und 
+                werden rund um die Uhr gehandelt.
+            </p>
         </div>
     </div>
+    
+    <footer class="container">
+        <p>© 2023 Finance Pro. Alle Rechte vorbehalten.</p>
+    </footer>
+    
+    <script>
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Schließe alle anderen Charts
+                document.querySelectorAll('.chart-container').forEach(chart => {
+                    chart.style.display = 'none';
+                });
+                
+                // Zeige den Chart für die ausgewählte Karte
+                const chart = this.querySelector('.chart-container');
+                chart.style.display = 'block';
+                
+                // Hier würden Sie normalerweise echte Chart-Daten laden
+                // Für dieses Beispiel zeigen wir nur einen Platzhalter
+                setTimeout(() => {
+                    chart.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#86868b;">Historische Daten werden geladen...</div>';
+                }, 500);
+                
+                // Scrollen Sie zum ausgewählten Asset
+                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+    </script>
 </body>
 </html>
