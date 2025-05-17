@@ -1,360 +1,54 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktienportal | Übersicht</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --bg-color: #f8f9fa;
-            --text-color: #333333;
-            --primary-color: #4a89dc;
-            --card-bg: #ffffff;
-            --hover-color: #f1f5f9;
-            --border-color: #e0e6ed;
-            --positive: #38c172;
-            --negative: #e3342f;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        header {
-            background-color: var(--card-bg);
-            padding: 2rem 1rem;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.8;
-        }
-        
-        .intro {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
-        }
-        
-        .stocks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        .stock-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-        }
-        
-        .stock-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            background-color: var(--hover-color);
-        }
-        
-        .stock-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .stock-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .stock-symbol {
-            opacity: 0.6;
-            font-size: 0.9rem;
-        }
-        
-        .stock-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stock-change {
-            font-weight: 600;
-        }
-        
-        .positive {
-            color: var(--positive);
-        }
-        
-        .negative {
-            color: var(--negative);
-        }
-        
-        .chart-container {
-            height: 0;
-            overflow: hidden;
-            transition: height 0.3s ease;
-            margin-top: 1rem;
-        }
-        
-        .chart-container.active {
-            height: 200px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-            color: var(--text-color);
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 768px) {
-            .stocks-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            header {
-                padding: 1.5rem 1rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Aktienportal</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{font-family:'Segoe UI',sans-serif;background:#f8f9fa;color:#333;margin:0;padding:0}
+header{background:#fff;text-align:center;padding:1.5rem;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+h1{color:#4a89dc;margin:0}
+.intro{max-width:800px;margin:1rem auto;padding:1rem;background:#fff;border-radius:8px}
+.stocks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;max-width:1000px;margin:1rem auto;padding:0 1rem}
+.card{background:#fff;border-radius:8px;padding:1rem;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer}
+.card:hover{transform:translateY(-3px)}
+.price{font-size:1.3rem;font-weight:700}
+.up{color:#38c172}
+.down{color:#e3342f}
+.chart{height:0;overflow:hidden;transition:height 0.3s}
+.chart.active{height:150px}
+footer{text-align:center;padding:1rem;margin-top:2rem;color:#666}
+@media(max-width:600px){.stocks{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Aktienmarkt</h1>
-        <p class="subtitle">Echtzeit-Übersicht der wichtigsten Aktien</p>
-    </header>
-    
-    <div class="intro">
-        <h2>Was sind Aktien?</h2>
-        <p>Aktien repräsentieren Anteile an einem Unternehmen. Wenn Sie Aktien kaufen, werden Sie Miteigentümer des Unternehmens und können von dessen Erfolg profitieren. Aktienkurse schwanken basierend auf Angebot und Nachfrage sowie der Performance des Unternehmens. Langfristig haben Aktien historisch gesehen höhere Renditen erzielt als viele andere Anlageformen, bergen aber auch größere Risiken.</p>
-    </div>
-    
-    <div class="stocks-grid">
-        <!-- Apple -->
-        <div class="stock-card" onclick="toggleChart('appleChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Apple</div>
-                    <div class="stock-symbol">AAPL</div>
-                </div>
-                <div class="stock-sector">Technologie</div>
-            </div>
-            <div class="stock-price">$172.34</div>
-            <div class="stock-change positive">+1.23%</div>
-            <div class="chart-container" id="appleChart">
-                <canvas></canvas>
-            </div>
-        </div>
-        
-        <!-- Microsoft -->
-        <div class="stock-card" onclick="toggleChart('microsoftChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Microsoft</div>
-                    <div class="stock-symbol">MSFT</div>
-                </div>
-                <div class="stock-sector">Technologie</div>
-            </div>
-            <div class="stock-price">$328.39</div>
-            <div class="stock-change positive">+0.87%</div>
-            <div class="chart-container" id="microsoftChart">
-                <canvas></canvas>
-            </div>
-        </div>
-        
-        <!-- Tesla -->
-        <div class="stock-card" onclick="toggleChart('teslaChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Tesla</div>
-                    <div class="stock-symbol">TSLA</div>
-                </div>
-                <div class="stock-sector">Automobil</div>
-            </div>
-            <div class="stock-price">$182.63</div>
-            <div class="stock-change negative">-2.15%</div>
-            <div class="chart-container" id="teslaChart">
-                <canvas></canvas>
-            </div>
-        </div>
-        
-        <!-- Amazon -->
-        <div class="stock-card" onclick="toggleChart('amazonChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Amazon</div>
-                    <div class="stock-symbol">AMZN</div>
-                </div>
-                <div class="stock-sector">E-Commerce</div>
-            </div>
-            <div class="stock-price">$185.71</div>
-            <div class="stock-change positive">+0.42%</div>
-            <div class="chart-container" id="amazonChart">
-                <canvas></canvas>
-            </div>
-        </div>
-        
-        <!-- Alphabet (Google) -->
-        <div class="stock-card" onclick="toggleChart('alphabetChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Alphabet</div>
-                    <div class="stock-symbol">GOOGL</div>
-                </div>
-                <div class="stock-sector">Technologie</div>
-            </div>
-            <div class="stock-price">$175.23</div>
-            <div class="stock-change positive">+1.56%</div>
-            <div class="chart-container" id="alphabetChart">
-                <canvas></canvas>
-            </div>
-        </div>
-        
-        <!-- Nvidia -->
-        <div class="stock-card" onclick="toggleChart('nvidiaChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Nvidia</div>
-                    <div class="stock-symbol">NVDA</div>
-                </div>
-                <div class="stock-sector">Technologie</div>
-            </div>
-            <div class="stock-price">$126.09</div>
-            <div class="stock-change negative">-0.89%</div>
-            <div class="chart-container" id="nvidiaChart">
-                <canvas></canvas>
-            </div>
-        </div>
-        
-        <!-- Meta (Facebook) -->
-        <div class="stock-card" onclick="toggleChart('metaChart')">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">Meta</div>
-                    <div class="stock-symbol">META</div>
-                </div>
-                <div class="stock-sector">Technologie</div>
-            </div>
-            <div class="stock-price">$511.90</div>
-            <div class="stock-change positive">+3.21%</div>
-            <div class="chart-container" id="metaChart">
-                <canvas></canvas>
-            </div>
-        </div>
-    </div>
-    
-    <footer>
-        Projekt von Shayan A., Karim K., Paul D.
-    </footer>
-
-    <script>
-        // Charts initialisieren
-        document.addEventListener('DOMContentLoaded', function() {
-            // Apple Chart
-            createChart('appleChart', [165, 168, 170, 169, 171, 172, 172.5], '#4a89dc');
-            
-            // Microsoft Chart
-            createChart('microsoftChart', [320, 325, 323, 326, 328, 327, 328.5], '#6cb2eb');
-            
-            // Tesla Chart
-            createChart('teslaChart', [190, 188, 185, 183, 184, 183, 182.5], '#e3342f');
-            
-            // Amazon Chart
-            createChart('amazonChart', [183, 184, 185, 184.5, 185, 185.5, 185.7], '#ffed4a');
-            
-            // Alphabet Chart
-            createChart('alphabetChart', [170, 172, 173, 174, 174.5, 175, 175.2], '#38c172');
-            
-            // Nvidia Chart
-            createChart('nvidiaChart', [128, 127, 126.5, 127, 126.5, 126, 126.1], '#9561e2');
-            
-            // Meta Chart
-            createChart('metaChart', [500, 505, 508, 510, 511, 511.5, 511.9], '#f66d9b');
-        });
-        
-        function createChart(containerId, dataPoints, color) {
-            const container = document.getElementById(containerId);
-            const canvas = container.querySelector('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-                    datasets: [{
-                        data: dataPoints,
-                        borderColor: color,
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: false,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        }
-        
-        function toggleChart(chartId) {
-            const chart = document.getElementById(chartId);
-            chart.classList.toggle('active');
-            
-            // Schließe andere Charts
-            document.querySelectorAll('.chart-container').forEach(container => {
-                if (container.id !== chartId && container.classList.contains('active')) {
-                    container.classList.remove('active');
-                }
-            });
-        }
-    </script>
+<header><h1>Aktienportal</h1><p>Echtzeit-Übersicht</p></header>
+<div class="intro"><h2>Was sind Aktien?</h2><p>Aktien sind Unternehmensanteile. Als Aktionär profitieren Sie vom Unternehmenserfolg.</p></div>
+<div class="stocks">
+<div class="card" onclick="toggleChart('c1')"><h3>Apple (AAPL)</h3><div class="price">$172 <span class="up">+1.2%</span></div><div class="chart" id="c1"><canvas></canvas></div></div>
+<div class="card" onclick="toggleChart('c2')"><h3>Microsoft (MSFT)</h3><div class="price">$328 <span class="up">+0.8%</span></div><div class="chart" id="c2"><canvas></canvas></div></div>
+<div class="card" onclick="toggleChart('c3')"><h3>Tesla (TSLA)</h3><div class="price">$182 <span class="down">-2.1%</span></div><div class="chart" id="c3"><canvas></canvas></div></div>
+<div class="card" onclick="toggleChart('c4')"><h3>Amazon (AMZN)</h3><div class="price">$185 <span class="up">+0.4%</span></div><div class="chart" id="c4"><canvas></canvas></div></div>
+<div class="card" onclick="toggleChart('c5')"><h3>Alphabet (GOOGL)</h3><div class="price">$175 <span class="up">+1.5%</span></div><div class="chart" id="c5"><canvas></canvas></div></div>
+<div class="card" onclick="toggleChart('c6')"><h3>Nvidia (NVDA)</h3><div class="price">$126 <span class="down">-0.8%</span></div><div class="chart" id="c6"><canvas></canvas></div></div>
+<div class="card" onclick="toggleChart('c7')"><h3>Meta (META)</h3><div class="price">$511 <span class="up">+3.2%</span></div><div class="chart" id="c7"><canvas></canvas></div></div>
+</div>
+<footer>Projekt von Shayan A., Karim K., Paul D.</footer>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+const stocks=[
+{id:'c1',data:[165,168,170,169,171,172,172],color:'#4a89dc'},
+{id:'c2',data:[320,325,323,326,328,327,328],color:'#6cb2eb'},
+{id:'c3',data:[190,188,185,183,184,183,182],color:'#e3342f'},
+{id:'c4',data:[183,184,185,184,185,185,185],color:'#ffed4a'},
+{id:'c5',data:[170,172,173,174,174,175,175],color:'#38c172'},
+{id:'c6',data:[128,127,126,127,126,126,126],color:'#9561e2'},
+{id:'c7',data:[500,505,508,510,511,511,511],color:'#f66d9b'}];
+stocks.forEach(stock=>{
+const ctx=document.getElementById(stock.id).querySelector('canvas').getContext('2d');
+new Chart(ctx,{type:'line',data:{labels:['Mo','Di','Mi','Do','Fr','Sa','So'],
+datasets:[{data:stock.data,borderColor:stock.color,borderWidth:2,tension:0.4,fill:false,pointRadius:0}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+scales:{x:{display:false},y:{display:false}}}});});});
+function toggleChart(id){document.getElementById(id).classList.toggle('active');}
+</script>
 </body>
 </html>
